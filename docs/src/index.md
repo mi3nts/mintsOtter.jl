@@ -4,7 +4,7 @@ CurrentModule = mintsOtter
 
 # mintsOtter
 
-Documentation for [mintsOtter](https://github.com/john-waczak/mintsOtter.jl).
+Documentation for [mintsOtter](https://github.com/mi3nts/mintsOtter.jl).
 
 ```@index
 ```

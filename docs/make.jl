@@ -6,11 +6,11 @@ DocMeta.setdocmeta!(mintsOtter, :DocTestSetup, :(using mintsOtter); recursive=tr
 makedocs(;
     modules=[mintsOtter],
     authors="John Waczak",
-    repo="https://github.com/john-waczak/mintsOtter.jl/blob/{commit}{path}#{line}",
+    repo="https://github.com/mi3nts/mintsOtter.jl/blob/{commit}{path}#{line}",
     sitename="mintsOtter.jl",
     format=Documenter.HTML(;
         prettyurls=get(ENV, "CI", "false") == "true",
-        canonical="https://john-waczak.github.io/mintsOtter.jl",
+        canonical="https://mi3nts.github.io/mintsOtter.jl",
         assets=String[],
     ),
     pages=[
@@ -19,6 +19,6 @@ makedocs(;
 )
 
 deploydocs(;
-    repo="github.com/john-waczak/mintsOtter.jl",
+    repo="github.com/mi3nts/mintsOtter.jl",
     devbranch="main",
 )
