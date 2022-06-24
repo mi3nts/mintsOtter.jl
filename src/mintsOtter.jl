@@ -3,6 +3,19 @@ module mintsOtter
 # Write your package code here.
 using CSV, DataFrames
 using Dates
+using ProgressMeter
+
+
+
+
+export importAirMar
+export importNMEA
+export importCOM1
+export importCOM2
+export importCOM3
+export importLISST
+
+
 
 
 # we will need to parse NMEA encoded gps/sensor strings
@@ -497,12 +510,78 @@ function importLISST(path::String)
 end
 
 
-export importAirMar
-export importNMEA
-export importCOM1
-export importCOM2
-export importCOM3
-export importLISST
+
+
+"""
+    processBoatFiles(basepath::String, outpath::String)
+
+Give a `basepath` find all boat files and generate CSVs, saving them to `outpath`.
+"""
+function processBoatFiles(basepath::String, outpath::String)
+    for (root, dirs, files) in walkdir(basepath)
+        @showprogress for file in files
+            if !(occursin("fixed", file))
+                if occursin("AirMar", file)
+                    println(file)
+                    name = split(file, "_")[2]
+                    airmar_gps, airmar_speed = importAirMar(joinpath(root, file))
+                    CSV.write(joinpath(outpath, name*"_airmar_gps.csv"), airmar_gps)
+                    CSV.write(joinpath(outpath, name*"_airmar_speed.csv"), airmar_speed)
+                elseif occursin("COM1", file)
+                    println(file)
+                    name = split(file, "_")[2]
+                    COM1 = importCOM1(joinpath(root, file))
+                    CSV.write(joinpath(outpath, name*"_COM1.csv"), COM1)
+
+                elseif occursin("COM2", file)
+                    println(file)
+                    name = split(file, "_")[2]
+                    COM2 = importCOM2(joinpath(root, file))
+                    CSV.write(joinpath(outpath, name*"_COM2.csv"), COM2)
+
+                elseif occursin("COM3", file)
+                    println(file)
+                    name = split(file, "_")[2]
+                    COM3 = importCOM3(joinpath(root, file))
+                    CSV.write(joinpath(outpath, name*"_COM3.csv"), COM3)
+
+                elseif occursin("LISST", file)
+                    println(file)
+                    name = split(file, "_")[2]
+                    LISST = importLISST(joinpath(root, file))
+                    CSV.write(joinpath(outpath, name*"_LISST.csv"), LISST)
+
+                elseif occursin("nmea", file) || occursin("NMEA", file)
+                    println(file)
+                    name = split(file, "_")[2]
+                    nmea = importNMEA(joinpath(root, file))
+                    CSV.write(joinpath(outpath, name*"_nmea.csv"), nmea)
+                end
+            end
+        end
+    end
+end
+
+
+"""
+    processAllBoatFiles(paths::Array{String}, dates::Array{String})
+
+For each path in `paths`, generate csv's from boat data. Used `dates` to generate output file names.
+"""
+function processAllBoatFiles(paths::Array{String}, dates::Array{String})
+    for i ∈ 1:length(paths)
+        out = joinpath(outpath, dates[i], "boat")
+        if !isdir(out)
+            mkdir(out)
+        end
+
+        try
+            processBoatFiles(paths[i], out)
+        catch e
+            println(e)
+        end
+    end
+end
 
 
 end
