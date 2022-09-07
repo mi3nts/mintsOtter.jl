@@ -10,4 +10,6 @@
 | day | by | sensors calibrated | 
 | - | - | --- | 
 | 8-26-22 | John | Example row | 
+| 8-24-22 | Prabu | Crude Oil | 
+| 8-24-22 | Gokul | Turbidity | 
 
